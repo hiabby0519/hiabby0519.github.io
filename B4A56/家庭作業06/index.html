@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+
+	<title>AnythingSlider</title>
+	<link rel="shortcut icon" href="demos/images/favicon.ico" type="image/x-icon">
+	<link rel="apple-touch-icon" href="demos/images/apple-touch-icon.png">
+
+	<!-- jQuery (required) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+
+	<!-- Syntax highlighting -->
+	<link rel="stylesheet" href="demos/prettify/prettify.css" media="screen">
+	<script src="demos/prettify/prettify.js"></script>
+
+	<!-- Anything Slider optional plugins -->
+	<script src="js/jquery.easing.1.2.js"></script>
+	<!-- http://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js -->
+	<script src="js/swfobject.js"></script>
+
+	<!-- Demo stuff -->
+	<link rel="stylesheet" href="demos/css/page.css" media="screen">
+	<script src="demos/js/jquery.jatt.min.js"></script>
+
+	<!-- AnythingSlider -->
+	<link rel="stylesheet" href="css/anythingslider.css">
+	<script src="js/jquery.anythingslider.js"></script>
+
+	<!-- AnythingSlider video extension; optional, but needed to control video pause/play -->
+	<script src="js/jquery.anythingslider.video.js"></script>
+
+	<!-- Ideally, add the stylesheet(s) you are going to use here,
+	 otherwise they are loaded and appended to the <head> automatically and will over-ride the IE stylesheet below -->
+	<link rel="stylesheet" href="css/theme-metallic.css">
+	<link rel="stylesheet" href="css/theme-minimalist-round.css">
+	<link rel="stylesheet" href="css/theme-minimalist-square.css">
+	<link rel="stylesheet" href="css/theme-construction.css">
+	<link rel="stylesheet" href="css/theme-cs-portfolio.css">
+
+	<script>
+		// Demo functions
+		// **************
+		$(function(){
+
+			prettyPrint();
+
+			// External Link with callback function
+			$("#slide-jump").click(function(){
+				$('#slider2').anythingSlider(4, function(slider){ /* alert('Now on page ' + slider.currentPage); */ });
+				return false;
+			});
+
+			// External Link
+			$("a.muppet").click(function(){
+				$('#slider1').anythingSlider(5);
+				$(document).scrollTop(0); // make the page scroll to the top so you can watch the video
+				return false;
+			});
+
+			// Report Events to console & features list
+			$('#slider1, #slider2').bind('before_initialize initialized swf_completed slideshow_start slideshow_stop slideshow_paused slideshow_unpaused slide_init slide_begin slide_complete', function(e, slider){
+				// show object ID + event (e.g. "slider1: slide_begin")
+				var txt = slider.$el[0].id + ': ' + e.type + ', now on panel #' + slider.currentPage;
+				$('#status').text(txt);
+				if (window.console && window.console.firebug){ console.debug(txt); } // added window.console.firebug to make this work in Opera
+			});
+
+			// Theme Selector (This is really for demo purposes only)
+			var themes = ['minimalist-round','minimalist-square','metallic','construction','cs-portfolio'];
+			$('#currentTheme').change(function(){
+				var theme = $(this).val();
+				$('#slider1').closest('div.anythingSlider')
+					.removeClass( $.map(themes, function(t){ return 'anythingSlider-' + t; }).join(' ') )
+					.addClass('anythingSlider-' + theme);
+				$('#slider1').anythingSlider(); // update slider - needed to fix navigation tabs
+			});
+
+			// Add a slide
+			var imageNumber = 1;
+			$('button.add').click(function(){
+				$('#slider1')
+					.append('<li><img src="demos/images/slide-tele-' + (++imageNumber%2 + 1)  + '.jpg" alt="" /></li>')
+					.anythingSlider(); // update the slider
+			});
+			$('button.remove').click(function(){
+				$('#slider1 > li:not(.cloned):last').remove();
+				$('#slider1').anythingSlider(); // update the slider
+			});
+
+		});
+
+	</script>
+
+	<script>
+		// Set up Sliders
+		// **************
+		$(function(){
+
+			$('#slider1').anythingSlider({
+				theme           : 'metallic',
+				easing          : 'easeInOutBack',
+				navigationFormatter : function(index, panel){
+					return ['Slab', 'Parking Lot', 'Drive', 'Glorius Dawn', 'Bjork?', 'Traffic Circle'][index - 1];
+				},
+				onSlideComplete : function(slider){
+					// alert('Welcome to Slide #' + slider.currentPage);
+				}
+			});
+
+			$('#slider2').anythingSlider({
+				mode                : 'f',   // fade mode - new in v1.8!
+				resizeContents      : true, // If true, solitary images/objects in the panel will expand to fit the viewport
+				navigationSize      : 3,     // Set this to the maximum number of visible navigation tabs; false to disable
+				navigationFormatter : function(index, panel){ // Format navigation labels with text
+					return ['課堂07', '課堂11', '課堂12'][index - 1];
+				},
+				onSlideBegin: function(e,slider) {
+					// keep the current navigation tab in view
+					slider.navWindow( slider.targetPage );
+				}
+			});
+
+			// tooltips for first demo
+			$.jatt();
+
+		});
+	</script>
+</head>
+
+<body id="main">
+
+	<div id="page-wrap">
+		<h1 style="color: purple";>網頁設計作品回顧</h1>
+			<br><br>
+			<ul id="slider2">
+				<li class="panel1">
+					<div>
+						<div class="textSlide">
+							<a href="https://hiabby0519.github.io/B4A56/%E8%AA%B2%E5%A0%82%E4%BD%9C%E6%A5%AD07/index.htm">
+							<img src="images/課堂07.jpg" alt="pic07" style="float: right; margin: 0 0 2px 10px; width: 375px; height: 250px;" />
+							</a>
+							<h2 style="color: blue";>07-javascript物件應用</h2>
+							<h3 style="color: red; font-weight:bold;">學習重點</h3>
+							<h3>
+							<ul>
+								<li>Javascript物件的概念</li>
+								<li>HTML表單的數字輸入</li>
+								<li>學習購物網站的介面設計</li>
+							</ul>
+							</h3>
+						</div>
+					</div>
+				</li>
+
+				<li class="panel2">
+					<div>
+						<div class="textSlide">
+							<a href="https://hiabby0519.github.io/B4A56/%E8%AA%B2%E5%A0%82%E4%BD%9C%E6%A5%AD11/index.htm">
+								<img src="images/課堂11.jpg" alt="pic10" style="float: right; margin: 0 0 2px 10px; width: 375px; height: 250px;" />
+							</a>
+							<h2 style="color: blue";>10-jQuery應用01</h2>
+							<h3 style="color: red; font-weight:bold;">學習重點</h3>
+							<h3>
+								<ul>
+									<li>jQurey基礎入門</li>
+									<li>jQurey的事件與特效</li>
+									<li>練習形狀變化與位移</li>
+								</ul>
+							</h3>
+						</div>
+					</div>
+				</li>
+
+				<li class="panel3">
+					<div>
+						<div class="textSlide">
+							<a href="https://hiabby0519.github.io/B4A56/%E8%AA%B2%E5%A0%82%E4%BD%9C%E6%A5%AD12/index.html">
+								<img src="images/課堂12.jpg" alt="pic12" style="float: right; margin: 0 0 2px 10px; width: 375px; height: 250px;" />
+							</a>
+							<h2 style="color: blue";>12-skitter</h2>
+							<h3 style="color: red; font-weight:bold;">學習重點</h3>
+							<h3>
+								<ul>
+									<li>skitter套件應用</li>
+									<li>多樣的轉場變化應用</li>
+								</ul>
+							</h3>
+						</div>
+					</div>
+				</li>
+
+			</ul>
+			<!-- END AnythingSlider #2 -->
+
+		<br>
+	</div>
+</body>
+</html>
